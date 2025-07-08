@@ -63,6 +63,14 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Track Card Styles */
+        .track-card {
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .track-card input:checked + div {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -111,21 +119,21 @@
                         <label for="cod_interest" class="block text-lg font-semibold text-emerald-400 mb-2">Certificate of Distinction in AI</label>
                         <p class="text-sm text-gray-400 mb-3">Our SIG is proposing a formal Certificate of Distinction (CoD) in AI in Medicine. Are you interested in pursuing this opportunity?</p>
                         <select id="cod_interest" name="cod_interest" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="No" selected>No</option>
-                            <option value="Maybe / Learn More">Maybe / I'd like to learn more</option>
+                            <option value="No">No</option>
+                            <option value="Maybe / Learn More" selected>Maybe / I'd like to learn more</option>
                             <option value="Yes">Yes</option>
                         </select>
                     </div>
 
-                    <!-- Track Selection - Hidden by default -->
-                    <div id="cod_tracks_container" class="hidden space-y-3 transition-all duration-500">
-                        <h4 class="text-md font-semibold text-gray-200">If you were to pursue the CoD, which of the five tracks would interest you most?</h4>
-                        <div class="space-y-4">
-                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_clinical" name="cod_track" value="Clinical AI and Decision Support" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_clinical" class="font-medium text-gray-300">Clinical AI and Decision Support</label><p class="text-xs text-gray-400">Integrate AI into clinical practice to enhance decision-making and patient care.</p></div></div>
-                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_bioinformatics" name="cod_track" value="Bioinformatics and Computational Biology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_bioinformatics" class="font-medium text-gray-300">Bioinformatics and Computational Biology</label><p class="text-xs text-gray-400">Use AI to analyze complex biological data (genomics, proteomics) for precision medicine.</p></div></div>
-                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_population" name="cod_track" value="Population Health and Epidemiology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_population" class="font-medium text-gray-300">Population Health and Epidemiology</label><p class="text-xs text-gray-400">Apply AI to public health, disease surveillance, and health equity challenges.</p></div></div>
-                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_ethics" name="cod_track" value="AI Ethics, Policy, and Regulation" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_ethics" class="font-medium text-gray-300">AI Ethics, Policy, and Regulation</label><p class="text-xs text-gray-400">Ensure responsible AI use by addressing bias, fairness, and governance.</p></div></div>
-                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_imaging" name="cod_track" value="AI in Imaging and Digital Pathology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_imaging" class="font-medium text-gray-300">AI in Imaging and Digital Pathology</label><p class="text-xs text-gray-400">Leverage computer vision for diagnostics in radiology and pathology.</p></div></div>
+                    <!-- Track Selection -->
+                    <div id="cod_tracks_container" class="space-y-3 transition-all duration-500 pt-3">
+                        <h4 class="text-md font-semibold text-gray-200">Which tracks would interest you? (Check all that apply)</h4>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <label for="track_clinical" class="track-card cursor-pointer"><input type="checkbox" id="track_clinical" name="cod_track" value="Clinical AI and Decision Support" class="sr-only"><div class="h-full p-4 border border-gray-600 rounded-lg hover:border-emerald-500"><h5 class="font-semibold text-gray-200">Clinical AI & Decision Support</h5><p class="text-xs text-gray-400 mt-1">Integrate AI into clinical practice to enhance decision-making and patient care.</p></div></label>
+                            <label for="track_bioinformatics" class="track-card cursor-pointer"><input type="checkbox" id="track_bioinformatics" name="cod_track" value="Bioinformatics and Computational Biology" class="sr-only"><div class="h-full p-4 border border-gray-600 rounded-lg hover:border-emerald-500"><h5 class="font-semibold text-gray-200">Bioinformatics & Computational Biology</h5><p class="text-xs text-gray-400 mt-1">Use AI to analyze complex biological data (genomics, proteomics) for precision medicine.</p></div></label>
+                            <label for="track_population" class="track-card cursor-pointer"><input type="checkbox" id="track_population" name="cod_track" value="Population Health and Epidemiology" class="sr-only"><div class="h-full p-4 border border-gray-600 rounded-lg hover:border-emerald-500"><h5 class="font-semibold text-gray-200">Population Health & Epidemiology</h5><p class="text-xs text-gray-400 mt-1">Apply AI to public health, disease surveillance, and health equity challenges.</p></div></label>
+                            <label for="track_ethics" class="track-card cursor-pointer"><input type="checkbox" id="track_ethics" name="cod_track" value="AI Ethics, Policy, and Regulation" class="sr-only"><div class="h-full p-4 border border-gray-600 rounded-lg hover:border-emerald-500"><h5 class="font-semibold text-gray-200">AI Ethics, Policy, and Regulation</h5><p class="text-xs text-gray-400 mt-1">Ensure responsible AI use by addressing bias, fairness, and governance.</p></div></label>
+                            <label for="track_imaging" class="track-card cursor-pointer lg:col-span-2"><input type="checkbox" id="track_imaging" name="cod_track" value="AI in Imaging and Digital Pathology" class="sr-only"><div class="h-full p-4 border border-gray-600 rounded-lg hover:border-emerald-500"><h5 class="font-semibold text-gray-200">AI in Imaging and Digital Pathology</h5><p class="text-xs text-gray-400 mt-1">Leverage computer vision for diagnostics in radiology and pathology.</p></div></label>
                         </div>
                     </div>
                 </div>
@@ -133,7 +141,7 @@
 
                 <!-- Interests Accordion -->
                 <div>
-                    <h3 class="text-lg font-semibold text-emerald-400 mb-4 border-t border-gray-700 pt-6">What other areas of AI interest you? (Check all that apply)</h3>
+                    <h3 class="text-lg font-semibold text-emerald-400 mb-4 border-t border-gray-700 pt-6">Are you interested in any of the following kinds of opportunities, topics, or programming?</h3>
                     <div class="space-y-2">
                         <!-- Machine Learning & Data Science Accordion -->
                         <div class="accordion-item bg-gray-900/50 rounded-lg border border-gray-700">
@@ -249,31 +257,26 @@
         });
         
         // --- Certificate of Distinction Logic ---
-        codInterestSelect.addEventListener('change', (event) => {
-            if (event.target.value === 'Yes' || event.target.value === 'Maybe / Learn More') {
+        function handleCodInterestChange() {
+             if (codInterestSelect.value === 'Yes' || codInterestSelect.value === 'Maybe / Learn More') {
                 codTracksContainer.classList.remove('hidden');
             } else {
                 codTracksContainer.classList.add('hidden');
-                // Uncheck any selected radio button when hiding the section
-                const selectedRadio = document.querySelector('input[name="cod_track"]:checked');
-                if (selectedRadio) {
-                    selectedRadio.checked = false;
-                }
+                // Uncheck any selected checkboxes when hiding the section
+                const trackCheckboxes = document.querySelectorAll('input[name="cod_track"]');
+                trackCheckboxes.forEach(cb => cb.checked = false);
             }
-        });
+        }
+        codInterestSelect.addEventListener('change', handleCodInterestChange);
+        // Run on page load to set initial state
+        handleCodInterestChange();
+
 
         // --- Form Submission Logic ---
-        // IMPORTANT: You will need to create a NEW Google Apps Script and deployment for this form.
-        const googleScriptURL = 'YOUR_NEW_GOOGLE_SCRIPT_URL_HERE';
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycby8mXzH3Df1xU4wOTRZuFsOgq-VskwWhXJH93tHVsMHnNiJb2trvIZl1v9qkEjhRQ/exec';
 
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
-            
-            if (googleScriptURL === 'YOUR_NEW_GOOGLE_SCRIPT_URL_HERE') {
-                errorMessage.innerHTML = `<p class="font-semibold text-red-300">Configuration Error</p><p class="text-sm text-red-400 mt-2">Please replace the placeholder URL in the script with your new Google Apps Script deployment URL.</p>`;
-                errorMessage.classList.remove('hidden');
-                return;
-            }
             
             buttonText.classList.add('hidden');
             buttonLoader.classList.remove('hidden');
@@ -283,6 +286,9 @@
             const formData = new FormData(form);
             const interests = Array.from(form.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
             formData.set('interests', interests.join(', '));
+            
+            const codTracks = Array.from(form.querySelectorAll('input[name="cod_track"]:checked')).map(cb => cb.value);
+            formData.set('cod_track', codTracks.join(', '));
 
             fetch(googleScriptURL, {
                 method: 'POST',
@@ -313,7 +319,9 @@
             header.classList.remove('hidden');
             form.classList.remove('hidden');
             form.reset();
-            codTracksContainer.classList.add('hidden'); // Also hide the tracks container
+            // Reset the dropdown to the default and trigger the change handler
+            codInterestSelect.value = 'Maybe / Learn More';
+            handleCodInterestChange();
             buttonText.classList.remove('hidden');
             buttonLoader.classList.add('hidden');
             submitButton.disabled = false;
@@ -326,46 +334,52 @@
         // --- Animated Matrix Background ---
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
+        let animationFrameId;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const alphabet = '0123456789';
-
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const rainDrops = [];
-
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
-        }
-
-        const drawMatrix = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#0f0'; // Green text
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
-        };
-        
-        let interval = setInterval(drawMatrix, 30);
-
-        window.addEventListener('resize', () => {
+        function setupMatrix() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            clearInterval(interval);
-            interval = setInterval(drawMatrix, 30);
-        });
+
+            const alphabet = '01';
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) {
+                rainDrops[x] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0f0'; // Green text
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            }
+            
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            
+            function animate() {
+                draw();
+                animationFrameId = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        window.addEventListener('resize', setupMatrix);
+        setupMatrix();
 
     </script>
 
