@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artificial Intelligence in Medicine Student Interest Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .font-roboto-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .form-checkbox:checked, .form-radio:checked {
+            background-color: #10b981; /* emerald-500 */
+            border-color: #10b981; /* emerald-500 */
+        }
+        .form-checkbox:checked:hover, .form-radio:checked:hover {
+            background-color: #059669; /* emerald-600 */
+            border-color: #059669; /* emerald-600 */
+        }
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        /* Accordion styles */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+        .accordion-content.open {
+            max-height: 1000px;
+            transition: max-height 1s ease-in-out;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-button.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        /* Spinner for button */
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #10b981;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Animated Background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div class="max-w-5xl w-full bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-700">
+
+            <!-- Header Section -->
+            <div id="header" class="text-center mb-8">
+                <h1 class="font-roboto-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-wider text-emerald-400">AI in Medicine SIG</h1>
+                <p class="mt-2 text-lg sm:text-xl text-gray-300">Shaping the Future of Healthcare</p>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-400">
+                    Welcome! Our group is at the forefront of integrating artificial intelligence with clinical practice. Tell us what areas of AI you're passionate about to help us plan this year's workshops, research projects, and speaker series.
+                </p>
+            </div>
+
+            <!-- Sign-up Form -->
+            <form id="interestForm" class="space-y-6">
+
+                <!-- Personal Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition duration-300" placeholder="Ada">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition duration-300" placeholder="Lovelace">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2">School Email</label>
+                        <input type="email" id="email" name="email" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition duration-300" placeholder="a.lovelace@medschool.edu">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">Phone Number <span class="text-gray-500">(Optional)</span></label>
+                        <input type="tel" id="phone" name="phone" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition duration-300" placeholder="(123) 456-7890">
+                    </div>
+                </div>
+                
+                <!-- Certificate of Distinction Section -->
+                <div class="space-y-4 pt-4 border-t border-gray-700">
+                    <div>
+                        <label for="cod_interest" class="block text-lg font-semibold text-emerald-400 mb-2">Certificate of Distinction in AI</label>
+                        <p class="text-sm text-gray-400 mb-3">Our SIG is proposing a formal Certificate of Distinction (CoD) in AI in Medicine. Are you interested in pursuing this opportunity?</p>
+                        <select id="cod_interest" name="cod_interest" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="No" selected>No</option>
+                            <option value="Maybe / Learn More">Maybe / I'd like to learn more</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+
+                    <!-- Track Selection - Hidden by default -->
+                    <div id="cod_tracks_container" class="hidden space-y-3 transition-all duration-500">
+                        <h4 class="text-md font-semibold text-gray-200">If you were to pursue the CoD, which of the five tracks would interest you most?</h4>
+                        <div class="space-y-4">
+                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_clinical" name="cod_track" value="Clinical AI and Decision Support" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_clinical" class="font-medium text-gray-300">Clinical AI and Decision Support</label><p class="text-xs text-gray-400">Integrate AI into clinical practice to enhance decision-making and patient care.</p></div></div>
+                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_bioinformatics" name="cod_track" value="Bioinformatics and Computational Biology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_bioinformatics" class="font-medium text-gray-300">Bioinformatics and Computational Biology</label><p class="text-xs text-gray-400">Use AI to analyze complex biological data (genomics, proteomics) for precision medicine.</p></div></div>
+                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_population" name="cod_track" value="Population Health and Epidemiology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_population" class="font-medium text-gray-300">Population Health and Epidemiology</label><p class="text-xs text-gray-400">Apply AI to public health, disease surveillance, and health equity challenges.</p></div></div>
+                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_ethics" name="cod_track" value="AI Ethics, Policy, and Regulation" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_ethics" class="font-medium text-gray-300">AI Ethics, Policy, and Regulation</label><p class="text-xs text-gray-400">Ensure responsible AI use by addressing bias, fairness, and governance.</p></div></div>
+                            <div class="relative flex items-start"><div class="flex h-5 items-center"><input type="radio" id="track_imaging" name="cod_track" value="AI in Imaging and Digital Pathology" class="form-radio h-4 w-4 text-emerald-500 bg-gray-700 border-gray-600 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="track_imaging" class="font-medium text-gray-300">AI in Imaging and Digital Pathology</label><p class="text-xs text-gray-400">Leverage computer vision for diagnostics in radiology and pathology.</p></div></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Interests Accordion -->
+                <div>
+                    <h3 class="text-lg font-semibold text-emerald-400 mb-4 border-t border-gray-700 pt-6">What other areas of AI interest you? (Check all that apply)</h3>
+                    <div class="space-y-2">
+                        <!-- Machine Learning & Data Science Accordion -->
+                        <div class="accordion-item bg-gray-900/50 rounded-lg border border-gray-700">
+                            <button type="button" class="accordion-button w-full flex justify-between items-center text-left p-4 font-semibold text-gray-200 hover:bg-gray-700/50 rounded-t-lg">
+                                <span>Machine Learning & Data Science</span>
+                                <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div class="space-y-4">
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="ml-predictive" name="interests" type="checkbox" value="Predictive Modeling" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="ml-predictive" class="font-medium text-gray-300">Predictive Modeling in Healthcare</label><p class="text-xs text-gray-400">Using patient data to forecast disease risk and treatment outcomes.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="ml-imaging" name="interests" type="checkbox" value="Medical Image Analysis" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="ml-imaging" class="font-medium text-gray-300">Medical Image Analysis (CNNs)</label><p class="text-xs text-gray-400">Applying deep learning to analyze X-rays, MRIs, and pathology slides.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="ml-nlp" name="interests" type="checkbox" value="NLP for Clinical Notes" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="ml-nlp" class="font-medium text-gray-300">NLP for Clinical Notes</label><p class="text-xs text-gray-400">Extracting insights from unstructured EMR data and patient records.</p></div></div>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="ml-genomics" name="interests" type="checkbox" value="AI in Genomics" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="ml-genomics" class="font-medium text-gray-300">AI in Genomics & Personalized Med</label><p class="text-xs text-gray-400">Analyzing genetic data to tailor treatments to individual patients.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="ml-fairness" name="interests" type="checkbox" value="Fairness & Explainability (XAI)" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="ml-fairness" class="font-medium text-gray-300">Fairness & Explainability (XAI)</label><p class="text-xs text-gray-400">Ensuring AI models are unbiased and their decisions are understandable.</p></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Applications & Ethics Accordion -->
+                        <div class="accordion-item bg-gray-900/50 rounded-lg border border-gray-700">
+                            <button type="button" class="accordion-button w-full flex justify-between items-center text-left p-4 font-semibold text-gray-200 hover:bg-gray-700/50 rounded-t-lg">
+                                <span>Clinical Applications & Ethics</span>
+                                <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="accordion-content">
+                               <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div class="space-y-4">
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="app-drug" name="interests" type="checkbox" value="AI for Drug Discovery" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="app-drug" class="font-medium text-gray-300">AI for Drug Discovery</label><p class="text-xs text-gray-400">Accelerating the process of finding new drugs and therapies.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="app-support" name="interests" type="checkbox" value="Clinical Decision Support" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="app-support" class="font-medium text-gray-300">Clinical Decision Support Systems</label><p class="text-xs text-gray-400">Building tools that assist clinicians with diagnosis and treatment plans.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="app-robotics" name="interests" type="checkbox" value="AI in Medical Robotics" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="app-robotics" class="font-medium text-gray-300">AI in Medical Robotics</label><p class="text-xs text-gray-400">Exploring AI's role in robotic surgery, rehabilitation, and patient care.</p></div></div>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="app-ethics" name="interests" type="checkbox" value="AI Ethics and Bias" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="app-ethics" class="font-medium text-gray-300">AI Ethics and Bias</label><p class="text-xs text-gray-400">Debating the ethical implications and potential for bias in medical AI.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="app-policy" name="interests" type="checkbox" value="Healthcare Policy & AI Regulation" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="app-policy" class="font-medium text-gray-300">Healthcare Policy & AI Regulation</label><p class="text-xs text-gray-400">Understanding the FDA/HIPAA landscape for AI-driven medical devices.</p></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Skills & Development Accordion -->
+                        <div class="accordion-item bg-gray-900/50 rounded-lg border border-gray-700">
+                            <button type="button" class="accordion-button w-full flex justify-between items-center text-left p-4 font-semibold text-gray-200 hover:bg-gray-700/50 rounded-t-lg">
+                                <span>Skills & Development</span>
+                                <svg class="accordion-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div class="space-y-4">
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="skill-python" name="interests" type="checkbox" value="Learning Python for AI" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="skill-python" class="font-medium text-gray-300">Learning Python for AI/ML</label><p class="text-xs text-gray-400">Beginner-friendly sessions on Python, Pandas, and Scikit-learn.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="skill-tf" name="interests" type="checkbox" value="Workshops on TensorFlow/PyTorch" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="skill-tf" class="font-medium text-gray-300">Workshops on TensorFlow/PyTorch</label><p class="text-xs text-gray-400">Hands-on tutorials for building and training deep learning models.</p></div></div>
+                                        <div class="relative flex items-start"><div class="flex h-5 items-center"><input id="skill-kaggle" name="interests" type="checkbox" value="Kaggle Competitions" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-emerald-500 focus:ring-emerald-500"></div><div class="ml-3 text-sm"><label for="skill-kaggle" class="font-medium text-gray-300">Kaggle Competitions & Datathons</label><p class="text-xs text-gray-400">Team up to solve real-world medical data science challenges.</p></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-4">
+                    <button id="submitButton" type="submit" class="font-roboto-mono bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/20 flex items-center justify-center w-full md:w-auto mx-auto">
+                        <span id="buttonText">Join the SIG</span>
+                        <span id="buttonLoader" class="hidden loader"></span>
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Submission Messages -->
+            <div id="submissionMessage" class="hidden text-center mt-8">
+                <div class="p-4 bg-green-900/50 border border-green-700 rounded-lg">
+                    <p class="font-semibold text-green-300">Thank you! Your submission has been received.</p>
+                </div>
+                <button id="newFormButton" class="mt-6 font-roboto-mono bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
+                    Next Student
+                </button>
+            </div>
+            <div id="errorMessage" class="hidden text-center mt-8 p-4 bg-red-900/50 border border-red-700 rounded-lg">
+                <!-- Error messages will be inserted here by the script -->
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Element References ---
+        const form = document.getElementById('interestForm');
+        const submitButton = document.getElementById('submitButton');
+        const buttonText = document.getElementById('buttonText');
+        const buttonLoader = document.getElementById('buttonLoader');
+        const submissionMessage = document.getElementById('submissionMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const newFormButton = document.getElementById('newFormButton');
+        const header = document.getElementById('header');
+        const codInterestSelect = document.getElementById('cod_interest');
+        const codTracksContainer = document.getElementById('cod_tracks_container');
+
+        // --- Accordion Logic ---
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                accordionButtons.forEach(otherButton => {
+                    if (otherButton !== button) {
+                        otherButton.classList.remove('open');
+                        otherButton.nextElementSibling.classList.remove('open');
+                    }
+                });
+                button.classList.toggle('open');
+                content.classList.toggle('open');
+            });
+        });
+        
+        // --- Certificate of Distinction Logic ---
+        codInterestSelect.addEventListener('change', (event) => {
+            if (event.target.value === 'Yes' || event.target.value === 'Maybe / Learn More') {
+                codTracksContainer.classList.remove('hidden');
+            } else {
+                codTracksContainer.classList.add('hidden');
+                // Uncheck any selected radio button when hiding the section
+                const selectedRadio = document.querySelector('input[name="cod_track"]:checked');
+                if (selectedRadio) {
+                    selectedRadio.checked = false;
+                }
+            }
+        });
+
+        // --- Form Submission Logic ---
+        // IMPORTANT: You will need to create a NEW Google Apps Script and deployment for this form.
+        const googleScriptURL = 'YOUR_NEW_GOOGLE_SCRIPT_URL_HERE';
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            if (googleScriptURL === 'YOUR_NEW_GOOGLE_SCRIPT_URL_HERE') {
+                errorMessage.innerHTML = `<p class="font-semibold text-red-300">Configuration Error</p><p class="text-sm text-red-400 mt-2">Please replace the placeholder URL in the script with your new Google Apps Script deployment URL.</p>`;
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            
+            buttonText.classList.add('hidden');
+            buttonLoader.classList.remove('hidden');
+            submitButton.disabled = true;
+            errorMessage.classList.add('hidden');
+
+            const formData = new FormData(form);
+            const interests = Array.from(form.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+            formData.set('interests', interests.join(', '));
+
+            fetch(googleScriptURL, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok || response.type === 'opaque') {
+                    header.classList.add('hidden');
+                    form.classList.add('hidden');
+                    submissionMessage.classList.remove('hidden');
+                } else {
+                    return response.text().then(text => { throw new Error(`Server responded with an error: ${text}`) });
+                }
+            })
+            .catch(error => {
+                console.error('Error!', error);
+                errorMessage.innerHTML = `<p class="font-semibold text-red-300">Submission failed. Please try again.</p><p class="text-sm text-red-400 mt-2">${error.message}</p>`;
+                errorMessage.classList.remove('hidden');
+                buttonText.classList.remove('hidden');
+                buttonLoader.classList.add('hidden');
+                submitButton.disabled = false;
+            });
+        });
+
+        // --- New Form Button Logic ---
+        newFormButton.addEventListener('click', () => {
+            submissionMessage.classList.add('hidden');
+            header.classList.remove('hidden');
+            form.classList.remove('hidden');
+            form.reset();
+            codTracksContainer.classList.add('hidden'); // Also hide the tracks container
+            buttonText.classList.remove('hidden');
+            buttonLoader.classList.add('hidden');
+            submitButton.disabled = false;
+            accordionButtons.forEach(button => {
+                button.classList.remove('open');
+                button.nextElementSibling.classList.remove('open');
+            });
+        });
+
+        // --- Animated Matrix Background ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const alphabet = '0123456789';
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const drawMatrix = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0'; // Green text
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        
+        let interval = setInterval(drawMatrix, 30);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            clearInterval(interval);
+            interval = setInterval(drawMatrix, 30);
+        });
+
+    </script>
+
+</body>
+</html>
